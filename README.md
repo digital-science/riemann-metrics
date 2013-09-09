@@ -95,6 +95,17 @@ The state will be 'ok' unless an exception is present in the ActiveSupport::Noti
 
 The following metric will be generated for a deliver.action_mailer event:
 
+````
+{
+	:host=>"Georges-MacBook-Air.local", 
+	:state=>"ok", 
+	:metric=>2000.0330000000001, 
+	:ttl=>5, 
+	:tags=>["AwesomeMailer", "email_send_runtime", "test"], 
+	:service=>"Rails.AwesomeMailer.email_send_runtime"
+}
+````
+
 email_send_runtime - the time taken to send a given email
 
 The state will be 'ok' unless an exception is present in the ActiveSupport::Notification payload, in which case it will be 'critical'.
