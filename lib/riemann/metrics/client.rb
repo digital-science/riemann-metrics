@@ -24,12 +24,6 @@ module Riemann
       end
 
       def gauge tags, state, metric, service='', description=nil
-        
-        p tags
-        p state
-        p metric
-        p service
-        
         event = {
           host: get_hostname,
           state: state,
