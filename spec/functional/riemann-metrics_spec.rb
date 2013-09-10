@@ -44,6 +44,23 @@ describe AwesomeController, :type => :controller do
       get 'send_email'
     end
 
+    it 'should allow for custom metric collection' do
+      Riemann::Metrics::Client.any_instance.should_receive(:gauge).with(
+        ["custom", "tag"],
+        "ok",
+        1,
+        "my-awesome-metric"
+      )
+      Riemann::Metrics::Client.any_instance.should_receive(:gauge).with(
+        ["custom", "tag"],
+        "ok",
+        anything(),
+        "my-awesome-timed-metric"
+      )
+
+      get 'custom_metrics'
+    end
+
   end
 
 end
