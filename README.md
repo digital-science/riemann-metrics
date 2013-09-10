@@ -154,6 +154,8 @@ Will generate a timing metric for the given block, for the 'my-awesome-metric' c
   end
 ````
 
+The 'subscription' to a given metric collects events generated from Riemann::Metrics.instrument and pushes them to Riemann. 
+
 ## Contributing
 
 1. Fork it
