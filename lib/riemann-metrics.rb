@@ -28,15 +28,17 @@ module Riemann
 
     end
 
-    # def self.publish channel, tags, state
-    #   ActiveSupport::Notifications.instrument(channel, :tags => ['sign_up','local'], :state => ApuRiemann::WARNING)
-    # end
-    # 
-    # def self.subscribe channel, &block
-    #   ActiveSupport::Notifications.subscribe(channel) do |*args|
-    #     block.call(@client, *args)
-    #   end
-    # end
+    def self.instrument channel, tags, state, metric, &block
+      ActiveSupport::Notifications.instrument(channel, tags: tags, state: state, metric: metric) do
+        block.call if block_given?
+      end
+    end
+
+    def self.subscribe channel, &block
+      ActiveSupport::Notifications.subscribe(channel) do |*args|
+        block.call(@client, *args)
+      end
+    end
 
     def self.initialize(host, port, service_name, riemann_env, ttl)
       @client = Riemann::Metrics::Client.new(host, port, service_name, riemann_env, ttl)
