@@ -110,6 +110,50 @@ email_send_runtime - the time taken to send a given email
 
 The state will be 'ok' unless an exception is present in the ActiveSupport::Notification payload, in which case it will be 'critical'.
 
+### Custom Metrics
+
+You can use Riemann::Metrics to collect your own custom metrics.
+
+#### Generate Metric
+
+````ruby
+  Riemann::Metrics.instrument "my-awesome-metric", ["custom","tag"], "ok", 1
+````
+
+Will generate a metric of 1, for the 'my-awesome-metric' channel with "custom" and "tag" as tags. The state will be 'ok'.
+
+````ruby
+  Riemann::Metrics.instrument "my-awesome-timed-metric", ["custom","tag"], "ok", 1 do
+    sleep 2
+  end
+````
+
+Will generate a timing metric for the given block, for the 'my-awesome-metric' channel with "custom" and "tag" as tags. The state will be 'ok'.
+
+*note* the supplied metric of 1 will be ignored and the time taken to execute the block will be used instead.
+
+#### Subscribe to the Metric
+
+````ruby
+  Riemann::Metrics.subscribe "my-awesome-metric" do |client, channel, start, finish, id, payload|
+    tags = payload[:tags]
+    state = payload[:state]
+    metric = payload[:metric]
+
+    client.gauge tags, state, metric, "my-awesome-metric"
+  end
+````
+
+````ruby
+  Riemann::Metrics.subscribe "my-awesome-timed-metric" do |client, channel, start, finish, id, payload|
+    tags = payload[:tags]
+    state = payload[:state]
+    total_time = ( finish - start ) * 1000
+
+    client.gauge tags, state, total_time, "my-awesome-timed-metric"
+  end
+````
+
 ## Contributing
 
 1. Fork it
