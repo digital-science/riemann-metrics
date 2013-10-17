@@ -17,6 +17,7 @@ module Riemann
         @service_name = service_name
         @ttl = ttl || TTL
         @riemann_env = riemann_env || 'none'
+        @hostname = get_hostname
       end
 
       def client
@@ -25,7 +26,7 @@ module Riemann
 
       def gauge tags, state, metric, service='', description=nil
         event = {
-          host: get_hostname,
+          host: @hostname,
           state: state,
           metric: metric,
           ttl: @ttl,
