@@ -34,7 +34,6 @@ module Riemann
           service: "#{@service_name}.#{service}"
         }
         event[:description] = description if description
-        Rails.logger.debug "Notifying: #{event.inspect}"
         client << event
       end
 
